@@ -17,7 +17,7 @@ export default function Cards() {
         </div>
 
         <div className="cards flex flex-row items-center justify-center gap-10 mt-10 w-300">
-          <div className="card bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB] ">
+          <div className="card bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB] ">
             <div className="cardimage w-50 h-60 flex items-center justify-center">
               <Image
                 src={Doctor}
@@ -34,7 +34,7 @@ export default function Cards() {
             </div>
           </div>
 
-          <div className="card2 bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
+          <div className="card2 bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
             <div className="cardimage w-60 h-60 rounded-full bg-[#E5E7EB] flex items-center justify-center">
               <Image
                 src={truckmap}
@@ -51,7 +51,7 @@ export default function Cards() {
             </div>
           </div>
 
-          <div className="card3 bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
+          <div className="card3 bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
             <div className="cardimage w-60 h-60 rounded-full bg-[#E5E7EB] flex items-center justify-center">
               <Image
                 src={farmer}
