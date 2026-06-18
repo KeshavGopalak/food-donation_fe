@@ -2,6 +2,7 @@ import Doctor from "../public/doctor.png";
 import truckmap from "../public/truckmap.png";
 import farmer from "../public/farmer.png";
 import Image from "next/image";
+import { cardtext } from "@/Constants/CardsText";
 export default function Cards() {
   return (
     <>
@@ -16,59 +17,33 @@ export default function Cards() {
           </span>
         </div>
 
-        <div className="cards flex flex-row items-center justify-center gap-10 mt-10 w-300">
-          <div className="card bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB] ">
-            <div className="cardimage w-50 h-60 flex items-center justify-center">
-              <Image
-                src={Doctor}
-                alt="Background"
-                className="w-300 h-40 object-cover"
-              />
-            </div>
-            <div className="cardtext">
-              <div className="text-lg font-bold">Post Surplus Food</div>
-              <div className="text-sm text-gray-600">
-                Restaurants, grocers, and caterers list excess food via our app
-                in under 60 seconds.
+ 
+      
+        
+         <div className="cards flex flex-row items-center justify-center gap-10 mt-10 w-300">
+          {cardtext.map((card) => (
+            <div className="card bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB] ">
+              <div className="cardimage w-50 h-60 flex items-center justify-center">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  width={300}
+                  height={160}
+                  className="w-300 h-40 object-cover"
+                />
+              </div>
+              <div className="cardtext">
+                <div className="text-lg font-bold">{card.title}</div>
+                <div className="text-sm text-gray-600">
+                  {card.description}
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="card2 bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
-            <div className="cardimage w-60 h-60 rounded-full bg-[#E5E7EB] flex items-center justify-center">
-              <Image
-                src={truckmap}
-                alt="Background"
-                className="w-full h-full object-cover"
-              />
+          ))}
+               
+            
             </div>
-            <div className="cardtext">
-              <div className="text-lg font-bold">Accept & Deliver</div>
-              <div className="text-sm text-gray-600">
-                Volunteers receive notifications for nearby pickups and deliver
-                them to designated shelters.
-              </div>
-            </div>
-          </div>
-
-          <div className="card3 bg-textcream rounded-2xl p-6 flex flex-col items-center gap-4 border border-[#E5E7EB]">
-            <div className="cardimage w-60 h-60 rounded-full bg-[#E5E7EB] flex items-center justify-center">
-              <Image
-                src={farmer}
-                alt="Background"
-                className="w-full h-full object-cover "
-              />
-            </div>
-            <div className="cardtext">
-              <div className="text-lg font-bold">Receive & Serve</div>
-              <div className="text-sm text-gray-600">
-                Local non-profits and shelters receive fresh food to supplement
-                their meal programs.
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </>
     );
 }
