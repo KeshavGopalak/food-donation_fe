@@ -4,46 +4,38 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <div className="main w-full h-screen  gap-10 font-inter">
-      <div className="w-full h-screen flex flex-col items-center justify-center gap-3 ml-5 font-inter bg-linear-to-r from-[#F9FAFB] via-[#F9FAFBE5] to-[#F9FAFB00]">
-        <Image
-          src={BgImage}
-          alt="Background"
-          className="absolute top-0 left-0 w-full h-full object-cover opacity-3"
-        />
-        <div className="label bg-[#10B98133] text-darkgreen px-2 py-1 rounded-lg mr-auto flex items-center justify-center gap-1">
-          <BadgeCheck className="inline-block w-6 mr-2" />
-          <span className="text-xs font-bold uppercase flex flex-col items-center">
-            Live Redistribution Active
-          </span>
+    <div className="relative w-full min-h-screen font-inter bg-gradient-to-r from-[#F9FAFB] via-[#FAFBFD] to-white">
+      <Image
+        src={BgImage}
+        alt="Background"
+        className="absolute top-0 left-0 w-full h-full object-cover opacity-5"
+        priority
+      />
+      <div className="relative z-10 flex flex-col items-start justify-center min-h-screen px-4 sm:px-6 md:px-12 lg:px-16 py-10 md:py-20 gap-6 md:gap-8">
+        <div className="label bg-[#10B98133] text-darkgreen px-3 py-2 md:px-4 md:py-2 rounded-lg flex items-center justify-center gap-2 text-xs md:text-sm">
+          <BadgeCheck className="w-4 h-4 md:w-6 md:h-6" />
+          <span className="font-bold uppercase">Live Redistribution Active</span>
         </div>
 
-        <div className="flex items-center font-bold w-full text-7xl">
-          <span>
-            Turn <span className="text-darkgreen font-inter">Waste</span> into
-            <br />
-            Warmth.
-          </span>
-        </div>
-        <div className="text-2xl w-200 mb-10 mr-auto">
-          Bridging the gap between surplus food and those who need it most. Our
-          intelligent logistics platform connects donors, volunteers, and
-          shelters in real-time.
-        </div>
-        <div className="button flex gap-6 mr-auto">
-          <button className="bg-darkgreen text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-[#00563B] transition duration-300">
+        <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight md:leading-snug max-w-2xl md:max-w-4xl">
+          Turn <span className="text-darkgreen">Waste</span> into
+          <br />
+          Warmth.
+        </h1>
+
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 max-w-lg md:max-w-2xl leading-relaxed">
+          Bridging the gap between surplus food and those who need it most. Our intelligent logistics platform connects donors, volunteers, and shelters in real-time.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 md:gap-6 pt-4">
+          <button className="bg-darkgreen text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-[#00563B] transition duration-300 w-full sm:w-auto">
             Start Donating
           </button>
-          <button className="bg-[#FFFFFF] text-darkgreen px-6 py-3 rounded-lg text-lg font-semibold hover:bg-[#C0C0C0] transition duration-300 border border-darkgreen">
+          <button className="bg-white text-darkgreen px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-gray-100 transition duration-300 border-2 border-darkgreen w-full sm:w-auto">
             Become a Volunteer
           </button>
         </div>
       </div>
-
-
-
-      
-
     </div>
   );
 }
