@@ -33,7 +33,7 @@ export default function Boxes() {
             We operate across 45 major urban centers, ensuring no edible food goes to waste while people are hungry.
           </p>
         </div>
-        <div className="w-full lg:w-auto h-40 md:h-48 lg:h-40 rounded-2xl overflow-hidden flex-shrink-0">
+        <div className="w-full lg:w-auto h-40 md:h-48 lg:h-40 rounded-2xl overflow-hidden shrink-0">
           <Image
             src={BgImage2}
             alt="Footprint Map"
