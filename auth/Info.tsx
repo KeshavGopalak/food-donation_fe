@@ -1,17 +1,17 @@
+import Image from "next/image";
+import image3 from "../public/5728e622726249677769fd660f07b0f42ef57201.png"
 export default function LoginInfo() {
   return (
-    <div className="hidden lg:flex flex-col justify-between bg-linear-to-b from-gray-900 to-gray-800 text-textwhite p-12 relative overflow-hidden">
+    <div className="hidden lg:flex flex-1 flex-col justify-between bg-linear-to-b from-gray-900 to-gray-800 text-textwhite p-12 relative overflow-hidden h-full">
       {/* Background Image Overlay */}
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage: `url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22%3E%3Crect fill=%22%23404040%22 width=%221200%22 height=%22600%22/%3E%3C/svg%3E')`,
-          backgroundSize: 'cover',
-        }}
+      <Image
+        className="inset-0 bg-cover absolute top-0 left-0 w-full h-full object-cover opacity-5"
+        src={image3}
+        alt="Background"
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-center items-center h-full text-center">
+      <div className="relative flex h-full flex-col justify-center">
         {/* Mission Badge */}
         <div className="inline-block bg-textgreen text-darkgreen font-bold px-4 py-1 rounded-full text-xs uppercase tracking-wider mb-6">
           OUR MISSION
@@ -26,11 +26,6 @@ export default function LoginInfo() {
         <p className="text-gray-300 text-base leading-relaxed max-w-md">
           Empowering communities through efficient logistics and compassionate distribution. We turn food waste into food security for thousands every day.
         </p>
-      </div>
-
-      {/* Footer */}
-      <div className="relative z-10 text-gray-400 text-xs">
-        © 2024 Vitality Logistics. Supporting global food redistribution.
       </div>
     </div>
   );

@@ -15,10 +15,12 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md px-8 py-12">
-      <div className="mb-8">
+    <div className="w-full max-w-md px-6 py-10 mx-auto sm:px-8 sm:py-12">
+      <div className="mb-8 text-center lg:text-left">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-        <p className="text-gray-600 text-sm">Please enter your details to access your dashboard.</p>
+        <p className="text-gray-600 text-sm mx-auto max-w-xs lg:max-w-none">
+          Please enter your details to access your dashboard.
+        </p>
       </div>
 
       <form onSubmit={handleLogin} className="space-y-5">
@@ -49,7 +51,7 @@ export default function LoginForm() {
         </div>
 
         {/* Remember Me & Forgot Password */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -67,7 +69,7 @@ export default function LoginForm() {
         {/* Login Button */}
         <button
           type="submit"
-          className="w-full bg-textgreen hover:bg-green-600 text-textwhite font-semibold py-3 rounded-lg transition-colors mt-6"
+          className="w-full bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold py-3 rounded-lg transition-colors mt-6"
         >
           Login
         </button>
