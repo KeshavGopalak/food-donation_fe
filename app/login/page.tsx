@@ -2,12 +2,11 @@ import LoginNav from "@/auth/Nav";
 import LoginForm from "@/auth/Form";
 import LoginInfo from "@/auth/Info";
 import LoginFooter from "@/auth/Footer";
-
+import Navbar from "@/Home/NavBar";
 export default function Login() {
   return (
     <div className="font-inter flex min-h-screen flex-col bg-white">
-      {/* Navigation */}
-      <LoginNav />
+     
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col lg:flex-row">
@@ -22,8 +21,7 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Footer */}
-      <LoginFooter />
+    
     </div>
   );
 }
