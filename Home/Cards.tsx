@@ -20,7 +20,7 @@ export default function Cards() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 w-full max-w-6xl">
         {cardtext.map((card, index) => (
           <div key={index} className="bg-[#FEF9F3] rounded-2xl md:rounded-3xl overflow-hidden flex flex-col gap-4 border border-[#E5E7EB] hover:shadow-lg transition-shadow duration-300">
-            <div className="relative w-full h-40 md:h-48 overflow-hidden flex-shrink-0">
+            <div className="relative w-full h-40 md:h-48 overflow-hidden shrink-0">
               <Image
                 src={card.image}
                 alt={card.title}

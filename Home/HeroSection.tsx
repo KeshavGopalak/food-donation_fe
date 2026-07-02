@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full min-h-screen font-inter bg-gradient-to-r from-[#F9FAFB] via-[#FAFBFD] to-white">
+    <div className="relative w-full min-h-screen font-inter bg-linear-to-r from-textcream via-[#FAFBFD] to-white">
       <Image
         src={BgImage}
         alt="Background"
