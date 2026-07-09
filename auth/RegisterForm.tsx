@@ -4,34 +4,31 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function RegisterForm() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API}/api/auth/login`, {
+      const res = await fetch(`${API}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || "Login failed");
+      if (!res.ok) throw new Error(data?.message || "Registration failed");
       // token handling is currently commented out
-      // if (data.token) {
-      //   localStorage.setItem("token", data.token);
-      // }
-      // navigate to protected database page
-      router.push("/");
+      // if (data.token) localStorage.setItem("token", data.token);
+      router.push("/database");
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {
@@ -42,13 +39,25 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md px-6 py-10 mx-auto sm:px-8 sm:py-12">
       <div className="mb-8 text-center lg:text-left">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h1>
         <p className="text-gray-600 text-sm mx-auto max-w-xs lg:max-w-none">
-          Please enter your details to access your dashboard.
+          Sign up to get started with your food donation dashboard.
         </p>
       </div>
 
-      <form onSubmit={handleLogin} className="space-y-5">
+      <form onSubmit={handleRegister} className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">Full name</label>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-textgreen focus:border-transparent text-sm"
+            required
+          />
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">Email Address</label>
           <input
@@ -73,27 +82,12 @@ export default function LoginForm() {
           />
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 border border-gray-300 rounded cursor-pointer accent-textgreen"
-            />
-            <span className="text-sm text-gray-700">Remember me</span>
-          </label>
-          <Link href="/forgot-password" className="text-sm text-textgreen hover:text-green-600 font-medium">
-            Forgot password?
-          </Link>
-        </div>
-
         <button
           type="submit"
           className="w-full bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold py-3 rounded-lg transition-colors mt-6"
           disabled={loading}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Creating..." : "Create account"}
         </button>
       </form>
 
@@ -105,17 +99,10 @@ export default function LoginForm() {
         <div className="flex-1 border-t border-gray-300"></div>
       </div>
 
-      <button className="w-full border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-        <svg className="w-5 h-5" viewBox="0 0 24 24">
-          <image href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='0' y='20' fontSize='14' fill='%23000'%3EG%3C/text%3E%3C/svg%3E" />
-        </svg>
-        <span>Sign in with Google</span>
-      </button>
-
       <p className="text-center text-sm text-gray-600 mt-6">
-        Don&apos;t have an account?{' '}
-        <Link href="/register" className="text-textgreen hover:text-green-600 font-semibold">
-          Sign up
+        Already have an account?{' '}
+        <Link href="/login" className="text-textgreen hover:text-green-600 font-semibold">
+          Sign in
         </Link>
       </p>
     </div>

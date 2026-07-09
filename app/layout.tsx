@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,7 +29,9 @@ export default function RootLayout({
       lang="en"
       className={inter.variable}
     >
-      <body className="min-h-full flex flex-col bg-white antialiased">{children}</body>
+      <body className="min-h-full flex flex-col bg-white antialiased">
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
