@@ -26,11 +26,9 @@ export default function LoginForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "Login failed");
-      // token handling is currently commented out
-      // if (data.token) {
-      //   localStorage.setItem("token", data.token);
-      // }
-      // navigate to protected database page
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
       router.push("/");
     } catch (err: any) {
       setError(err.message || "An error occurred");
