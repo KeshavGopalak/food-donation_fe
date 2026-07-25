@@ -23,13 +23,13 @@ export default function Footer() {
             <a href="mailto:info@vitalitylogistics.com" className="text-emerald-600 hover:underline transition font-medium">
               Contact Us
             </a>
-            <Link href="/faq" className="text-emerald-600 hover:underline transition font-medium">
+            <Link href="/" className="text-emerald-600 hover:underline transition font-medium">
               FAQ
             </Link>
-            <Link href="/about" className="text-emerald-600 hover:underline transition font-medium">
+            <Link href="/" className="text-emerald-600 hover:underline transition font-medium">
               About
             </Link>
-            <Link href="/tos" className="text-emerald-600 hover:underline transition font-medium">
+            <Link href="/" className="text-emerald-600 hover:underline transition font-medium">
               Terms of Service
             </Link>
           </div>
