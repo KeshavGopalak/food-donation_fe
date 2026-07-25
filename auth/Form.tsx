@@ -29,7 +29,7 @@ export default function LoginForm() {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
-      router.push("/");
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {
