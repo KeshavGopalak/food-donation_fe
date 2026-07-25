@@ -1,10 +1,11 @@
 import { BadgeCheck, Truck } from "lucide-react";
 import BgImage from "../public/4d25b8ac71caeaac3ebc624c453ba1c8ed833c5d.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full min-h-screen font-inter bg-linear-to-r from-textcream via-[#FAFBFD] to-white">
+    <div className="relative w-full min-h-screen font-inter bg-white">
       <Image
         src={BgImage}
         alt="Background"
@@ -28,12 +29,18 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 pt-4">
-          <button className="bg-darkgreen text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-[#00563B] transition duration-300 w-full sm:w-auto">
+          <Link 
+            href="/donations"
+            className="bg-darkgreen text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-[#00563B] transition duration-300 w-full sm:w-auto text-center"
+          >
             Start Donating
-          </button>
-          <button className="bg-white text-darkgreen px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-gray-100 transition duration-300 border-2 border-darkgreen w-full sm:w-auto">
+          </Link>
+          <Link
+            href="/community"
+            className="bg-white text-darkgreen px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-base font-semibold hover:bg-gray-100 transition duration-300 border-2 border-darkgreen w-full sm:w-auto text-center"
+          >
             Become a Volunteer
-          </button>
+          </Link>
         </div>
       </div>
     </div>

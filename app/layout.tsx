@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,9 +30,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={inter.variable}
+      className={cn("font-sans", geist.variable)}
     >
-      <body className="min-h-full flex flex-col bg-white antialiased">{children}</body>
+      <body className="min-h-full flex flex-col bg-white antialiased">
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
