@@ -1,7 +1,7 @@
-import Dashboard from "@/dashboard/dashboard";
+import Dashboard from "@/components/pages/dashboard/dashboard";
 
 
-export default function DonationsPage() {
+export default function DashboardPage() {
   return <Dashboard />;
 
 

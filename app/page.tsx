@@ -1,9 +1,9 @@
-import HeroSection from "@/Home/HeroSection";
-import Boxes from "@/Home/Boxes";
-import Cards from "@/Home/Cards";
-import GetStarted from "@/Home/GetStarted";
-import Navbar from "@/Home/NavBar";
-import Footer from "@/Home/Footer";
+import HeroSection from "@/components/pages/Home/HeroSection";
+import Boxes from "@/components/pages/Home/Boxes";
+import Cards from "@/components/pages/Home/Cards";
+import GetStarted from "@/components/pages/Home/GetStarted";
+import Navbar from "@/components/pages/Home/NavBar";
+import Footer from "@/components/pages/Home/Footer";
 
 export default function Home() {
   return (

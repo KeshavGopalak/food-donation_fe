@@ -1,8 +1,8 @@
 
-import LoginForm from "@/auth/Form";
-import LoginInfo from "@/auth/Info";
+import LoginForm from "@/components/pages/auth/Form";
+import LoginInfo from "@/components/pages/auth/Info";
 
-import Navbar from "@/Home/NavBar";
+import Navbar from "@/components/pages/Home/NavBar";
 export default function Login() {
   return (
     <div className="font-inter flex min-h-screen flex-col bg-white">
