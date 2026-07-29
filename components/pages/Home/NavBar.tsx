@@ -8,7 +8,6 @@ const links = [
   { href: "/", label: "Dashboard" },
   { href: "/impact", label: "Impact" },
   { href: "/community", label: "Community" },
-  { href: "/donations", label: "Donations" },
 ];
 
 export default function Navbar() {

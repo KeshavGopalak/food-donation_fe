@@ -1,9 +1,28 @@
-import { Bell, Building2, ChartColumn, HelpCircle, LayoutGrid, LogOut, MessageSquare, Plus, Search, Soup, Table2, TrendingUp, Truck, UtensilsCrossed } from "lucide-react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
+import {
+  UtensilsCrossed,
+  LayoutGrid,
+  Table2,
+  Plus,
+  HelpCircle,
+  LogOut,
+  Search,
+  Bell,
+  Truck,
+  Soup,
+  Building2,
+  TrendingUp,
+  Recycle,
+  Croissant,
+  ChartColumn,
+  MessageSquare,
+  ArrowRight
+} from 'lucide-react';
 
-export default function Profile() {
-  return(
-     <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
+export default function Dashboard() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
       {/* Sidebar */}
       <aside className="w-60 bg-emerald-950 shrink-0 flex flex-col p-4">
         <div className="flex items-center gap-3 px-2 py-3 mb-8">
@@ -19,25 +38,25 @@ export default function Profile() {
         <nav className="flex flex-col gap-1">
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-300 text-sm font-medium hover:bg-emerald-900 transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium"
           >
             <LayoutGrid className="w-4 h-4" />
             Overview
           </Link>
-          <a
-            href="#"
+          <Link
+            href="/donations"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-300 text-sm font-medium hover:bg-emerald-900 transition-colors"
           >
             <Table2 className="w-4 h-4" />
             Donations
-          </a>
+          </Link>
         </nav>
 
         <div className="mt-auto flex flex-col gap-1">
-          <button className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold mb-4 hover:bg-emerald-700 transition-colors">
+          <Link href="/donations" className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold mb-4 hover:bg-emerald-700 transition-colors">
             <Plus className="w-4 h-4" />
             New Donation
-          </button>
+          </Link>
           <a href="#" className="flex items-center gap-3 px-3 py-2 text-emerald-400 text-sm">
             <HelpCircle className="w-4 h-4" />
             Help Center
@@ -77,20 +96,6 @@ export default function Profile() {
 
         {/* Content */}
         <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
-        {/* Profile menu */}
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-lg font-semibold">
-                        JD
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-semibold text-gray-900">John Doe</h2>
-                        <p className="text-sm text-gray-500">
-                            Profile
-                        </p>    
-                    </div>
-                </div>
-            </div>
           {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
@@ -131,8 +136,40 @@ export default function Profile() {
           </div>
 
           {/* Two column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Left column */}
+            <div className="lg:col-span-1 flex flex-col gap-4">
+              <div className="bg-emerald-600 rounded-xl p-5 text-white">
+                <h3 className="text-lg font-bold mb-2">Ready to share?</h3>
+                <p className="text-sm text-emerald-50 leading-relaxed mb-5">
+                  Submit your excess inventory and our logistics team will handle the rest.
+                </p>
+                <button className="bg-white text-emerald-700 text-sm font-semibold px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-emerald-50 transition-colors">
+                  Donate Food
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Insights</h3>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-gray-500">
+                      <Recycle className="w-4 h-4 text-emerald-600" />
+                      <span className="text-sm">CO2 Saved</span>
+                    </div>
+                    <span className="text-sm font-bold text-gray-900">12.5kg</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-gray-500">
+                      <Croissant className="w-4 h-4 text-amber-600" />
+                      <span className="text-sm">Most Donated</span>
+                    </div>
+                    <span className="text-sm font-bold text-gray-900">Bakery</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Right column */}
             <div className="lg:col-span-2">
@@ -219,7 +256,6 @@ export default function Profile() {
                     <span className="text-xs text-amber-600 font-semibold">Expiring in 2h</span>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -245,7 +281,6 @@ export default function Profile() {
           </div>
           <div className="max-w-7xl mx-auto text-xs text-gray-400 mt-4">© 2024</div>
         </footer>
-
       </div>
     </div>
   );

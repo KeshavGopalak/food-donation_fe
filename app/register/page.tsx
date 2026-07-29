@@ -1,8 +1,8 @@
 
-import RegisterForm from "@/auth/RegisterForm";
-import LoginInfo from "@/auth/Info";
+import RegisterForm from "@/components/pages/auth/RegisterForm";
+import LoginInfo from "@/components/pages/auth/Info";
 
-import Navbar from "@/Home/NavBar";
+import Navbar from "@/components/pages/Home/NavBar";
 
 export default function Register() {
   return (

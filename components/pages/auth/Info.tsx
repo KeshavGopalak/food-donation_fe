@@ -1,5 +1,5 @@
 import Image from "next/image";
-import image3 from "../public/5728e622726249677769fd660f07b0f42ef57201.png"
+import image3 from "@/public/5728e622726249677769fd660f07b0f42ef57201.png"
 export default function LoginInfo() {
   return (
     <div className="hidden lg:flex flex-1 flex-col justify-between bg-linear-to-b from-gray-900 to-gray-800 text-textwhite p-12 relative overflow-hidden h-full">

@@ -1,5 +1,5 @@
 import { BadgeCheck, Truck } from "lucide-react";
-import BgImage from "../public/4d25b8ac71caeaac3ebc624c453ba1c8ed833c5d.png";
+import BgImage from "@/public/4d25b8ac71caeaac3ebc624c453ba1c8ed833c5d.png";
 import Image from "next/image";
 import Link from "next/link";
 
