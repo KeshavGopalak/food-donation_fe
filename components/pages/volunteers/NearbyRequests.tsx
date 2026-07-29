@@ -246,7 +246,7 @@ export default function NearbyRequests() {
 
           {/* Map */}
           {/* <RequestsMap /> */}
-          <APIProvider apiKey={'AIzaSyAWbDdAVCTuV7Il1-Psc5Ppqx7zlEgqDd4'}>
+          <APIProvider apiKey={''}>
       <Map defaultCenter={position} defaultZoom={10} mapId="DEMO_MAP_ID">
         <AdvancedMarker position={position} />
       </Map>
