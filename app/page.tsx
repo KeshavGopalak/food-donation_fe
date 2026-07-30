@@ -1,3 +1,4 @@
+"use client";
 import HeroSection from "@/components/pages/Home/HeroSection";
 import Boxes from "@/components/pages/Home/Boxes";
 import Cards from "@/components/pages/Home/Cards";

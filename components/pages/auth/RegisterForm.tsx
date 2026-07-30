@@ -26,8 +26,7 @@ export default function RegisterForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "Registration failed");
-      // token handling is currently commented out
-      // if (data.token) localStorage.setItem("token", data.token);
+    
       router.push("/database");
     } catch (err: any) {
       setError(err.message || "An error occurred");

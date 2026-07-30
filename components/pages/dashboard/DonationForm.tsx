@@ -76,12 +76,7 @@ export default function DonationForm() {
         return;
       }
 
-      // const response = await fetch(`${API_URL}/api/auth/me`);
-
-      // if (!response.ok) throw new Error("Failed to fetch current user");
-
-      // const data = await response.json();
-      // Adjust this mapping if your /api/auth/me shape differs
+  
 
     const user = JSON.parse(userdata);
       setCurrentUser({
