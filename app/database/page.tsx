@@ -8,23 +8,16 @@ export default function DatabasePage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    // if (!token) {
-    //   router.replace("/login");
-    //   return;
-    // }
+ 
 
     (async () => {
       try {
         const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
         const res = await fetch(`${API}/api/database`, {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
+
         });
         if (!res.ok) {
-          // token invalid or expired
-          // localStorage.removeItem("token");
+
           router.replace("/login");
           return;
         }
