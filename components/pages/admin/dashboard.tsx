@@ -3,72 +3,10 @@
 import { useState } from "react";
 import { Search, ChevronDown, UserPlus, MoreVertical, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import Layout from "./layout";
-type Role = "Donor" | "Volunteer" | "Shelter";
-type Status = "Active" | "Pending" | "Inactive";
-
-interface User {
-  name: string;
-  email: string;
-  avatar: string | null;
-  initials?: string;
-  org: string;
-  joinDate: string;
-  role: Role;
-  status: Status;
-}
+import { USERS } from "@/Constants/AdminDashboard";
+import { ROLE_STYLES, STATUS_STYLES } from "@/types/AdminDashboard";
 
 
-const USERS: User[] = [
-  {
-    name: "Marcus Chen",
-    email: "marcus.c@example.com",
-    avatar: "https://i.pravatar.cc/64?img=51",
-    org: "Green Valley Organics",
-    joinDate: "Oct 12, 2023",
-    role: "Donor",
-    status: "Active",
-  },
-  {
-    name: "Sarah Jenkins",
-    email: "sarah.j@logistic.org",
-    avatar: "https://i.pravatar.cc/64?img=47",
-    org: "Independent",
-    joinDate: "Jan 05, 2024",
-    role: "Volunteer",
-    status: "Active",
-  },
-  {
-    name: "City Harvest Hub",
-    email: "ops@cityharvest.org",
-    avatar: null,
-    initials: "CH",
-    org: "City Harvest Foundation",
-    joinDate: "Feb 22, 2024",
-    role: "Shelter",
-    status: "Pending",
-  },
-  {
-    name: "Robert Kilgore",
-    email: "r.kilgore@foundation.com",
-    avatar: "https://i.pravatar.cc/64?img=13",
-    org: "St. Jude Community",
-    joinDate: "Dec 15, 2023",
-    role: "Donor",
-    status: "Inactive",
-  },
-];
-
-const ROLE_STYLES = {
-  Donor: "bg-amber-50 text-amber-700",
-  Volunteer: "bg-emerald-50 text-emerald-700",
-  Shelter: "bg-sky-50 text-sky-700",
-};
-
-const STATUS_STYLES = {
-  Active: { dot: "bg-emerald-500", text: "text-emerald-600" },
-  Pending: { dot: "bg-amber-500", text: "text-amber-600" },
-  Inactive: { dot: "bg-slate-400", text: "text-slate-400" },
-};
 
 export default function UsersPage() {
   const [search, setSearch] = useState("");

@@ -1,53 +1,19 @@
-import { Utensils, HandHeart, Truck, Grid2x2, ChevronDown, MoreVertical } from "lucide-react";
+import { ChevronDown, MoreVertical } from "lucide-react";
 import Layout from "./layout";
 import { REGISTRATIONS, WEEK_DATA } from "@/Constants/AdminUsers";
+import { STAT_CARDS, StatCardData } from "@/Constants/AnalyticsData";
 import { ROLE_STYLES, STATUS_STYLES } from "@/types/AdminTypes";
-
-
-
-
-
-
-
 
 export default function AnalyticsPage() {
   const maxValue = Math.max(...WEEK_DATA.map((d) => d.value));
 
   return (
     <Layout activePage="analytics" pageTitle="Analytics Dashboard">
-      {/* Stat cards */}
+      {/* Stat cards section */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard
-          icon={<Utensils className="w-4 h-4 text-emerald-700" />}
-          label="Total Meals Saved"
-          value="124,592"
-          sub="↗ +12% from last month"
-          subClass="text-emerald-600"
-        />
-        <StatCard
-          icon={<HandHeart className="w-4 h-4 text-amber-700" />}
-          label="Active Donors"
-          value="1,204"
-          sub="↗ 84 new this week"
-          subClass="text-emerald-600"
-        />
-        <StatCard
-          icon={<Truck className="w-4 h-4 text-sky-700" />}
-          label="Deliveries in Progress"
-          value="43"
-          sub="● Live Tracking"
-          subClass="text-sky-600"
-        />
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm text-slate-500">Area Efficiency</div>
-            <Grid2x2 className="w-4 h-4 text-rose-500" />
-          </div>
-          <div className="text-3xl font-semibold text-slate-800 mb-2">94.2%</div>
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-emerald-600 rounded-full" style={{ width: "94.2%" }} />
-          </div>
-        </div>
+        {STAT_CARDS.map((card) => (
+          <StatCard key={card.id} card={card} />
+        ))}
       </div>
 
       {/* Chart + hotspots */}
@@ -156,15 +122,31 @@ export default function AnalyticsPage() {
   );
 }
 
-function StatCard({ icon, label, value, sub, subClass }: { icon: React.ReactNode; label: string; value: string; sub: string; subClass: string }) {
+// Updated StatCard component taking full card object
+function StatCard({ card }: { card: StatCardData }) {
+  const IconComponent = card.icon;
+
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-5">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-sm text-slate-500">{label}</div>
-        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">{icon}</div>
+        <div className="text-sm text-slate-500">{card.label}</div>
+        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+          <IconComponent className="w-4 h-4" />
+        </div>
       </div>
-      <div className="text-3xl font-semibold text-slate-800 mb-1">{value}</div>
-      <div className={`text-xs ${subClass}`}>{sub}</div>
+
+      <div className="text-3xl font-semibold text-slate-800 mb-1">{card.value}</div>
+
+      {card.type === "progress" ? (
+        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden mt-2">
+          <div
+            className="h-full bg-emerald-600 rounded-full"
+            style={{ width: `${card.progressValue}%` }}
+          />
+        </div>
+      ) : (
+        <div className={`text-xs ${card.subClass}`}>{card.sub}</div>
+      )}
     </div>
   );
 }
