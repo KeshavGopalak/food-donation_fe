@@ -7,15 +7,17 @@ import Navbar from "@/components/pages/Home/NavBar";
 import Footer from "@/components/pages/Home/Footer";
 
 export default function Home() {
+ 
   return (
-    <div className="font-inter">
-      <Navbar />
-      <HeroSection />
-      <Boxes />
-      <Cards />
-      <GetStarted />
-      <Footer />
-    </div>
+    
+      <div className="font-inter">
+        <Navbar />
+        <HeroSection />
+        <Boxes />
+        <Cards />
+        <GetStarted />
+        <Footer />
+      </div>
+    
   );
 }
-

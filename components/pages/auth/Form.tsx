@@ -3,38 +3,41 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { LoginPayload, LoginResponse } from "@/types/authTypes";
+import { authService } from "@/services/authServices";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${API}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || "Login failed");
+  // Strongly-typed mutation hook
+  const loginMutation = useMutation<LoginResponse, Error, LoginPayload>({
+    mutationFn: authService.login,
+    onSuccess: (data) => {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      // Invalidate relevant queries in TanStack cache
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+
+      // Navigate to dashboard
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -88,14 +91,16 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="w-full bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold py-3 rounded-lg transition-colors mt-6"
-          disabled={loading}
+          className="w-full bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold py-3 rounded-lg transition-colors mt-6 disabled:opacity-50"
+          disabled={loginMutation.isPending}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loginMutation.isPending ? "Logging in..." : "Login"}
         </button>
       </form>
 
-      {error && <p className="text-red-600 mt-4 text-sm">{error}</p>}
+      {loginMutation.isError && (
+        <p className="text-red-600 mt-4 text-sm">{loginMutation.error.message}</p>
+      )}
 
       <div className="flex items-center gap-4 my-6">
         <div className="flex-1 border-t border-gray-300"></div>
