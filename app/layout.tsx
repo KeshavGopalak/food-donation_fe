@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
+import Providers from "@/provider/providers";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
@@ -33,8 +33,11 @@ export default function RootLayout({
       className={cn("font-sans", geist.variable)}
     >
       <body className="min-h-full flex flex-col bg-white antialiased">
-        <main className="flex-1">{children}</main>
+        <Providers><main className="flex-1">{children}</main></Providers>
       </body>
     </html>
   );
 }
+
+// app/layout.tsx
+
