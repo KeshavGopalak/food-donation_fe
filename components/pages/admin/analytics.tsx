@@ -1,11 +1,95 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { ChevronDown, MoreVertical } from "lucide-react";
 import Layout from "./layout";
 import { REGISTRATIONS, WEEK_DATA } from "@/Constants/AdminUsers";
 import { STAT_CARDS, StatCardData } from "@/Constants/AnalyticsData";
+import { getAllAdminUsers } from "@/services/adminServices";
 import { ROLE_STYLES, STATUS_STYLES } from "@/types/AdminTypes";
 
+interface RecentRegistration {
+  name: string;
+  email: string;
+  date: string;
+  role: string;
+  status: string;
+}
+
+function normalizeRole(role: string) {
+  switch (role?.toLowerCase()) {
+    case "admin":
+      return "Admin";
+    case "volunteer":
+      return "Volunteer";
+    case "user":
+      return "User";
+    case "donor":
+      return "Donor";
+    case "shelter":
+      return "Shelter";
+    default:
+      return role ? `${role.charAt(0).toUpperCase()}${role.slice(1)}` : "User";
+  }
+}
+
+function normalizeStatus(status: string) {
+  switch (status?.toLowerCase()) {
+    case "active":
+      return "Active";
+    case "inactive":
+      return "Inactive";
+    case "pending":
+      return "Pending";
+    case "verified":
+      return "Verified";
+    default:
+      return status ? `${status.charAt(0).toUpperCase()}${status.slice(1)}` : "Pending";
+  }
+}
+
+function formatDate(dateString: string) {
+  const parsed = new Date(dateString);
+  if (Number.isNaN(parsed.valueOf())) {
+    return "-";
+  }
+  return parsed.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+}
+
 export default function AnalyticsPage() {
+  const [registrations, setRegistrations] = useState<RecentRegistration[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const maxValue = Math.max(...WEEK_DATA.map((d) => d.value));
+
+  useEffect(() => {
+    getAllAdminUsers()
+      .then((users) => {
+        const recent = users
+          .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
+          .slice(0, 5)
+          .map((user) => ({
+            name: user.name,
+            email: user.email,
+            date: formatDate(user.createdAt),
+            role: normalizeRole(user.role),
+            status: normalizeStatus(user.status),
+          }));
+
+        setRegistrations(recent);
+        setFetchError(null);
+      })
+      .catch((error) => {
+        setFetchError(error?.message ?? "Unable to fetch recent registrations.");
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const displayRegistrations = registrations.length > 0 ? registrations : REGISTRATIONS;
 
   return (
     <Layout activePage="analytics" pageTitle="Analytics Dashboard">
@@ -77,7 +161,6 @@ export default function AnalyticsPage() {
           <thead>
             <tr className="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-100">
               <th className="px-6 py-3 font-medium">Name</th>
-              <th className="px-6 py-3 font-medium">Organization</th>
               <th className="px-6 py-3 font-medium">Registration Date</th>
               <th className="px-6 py-3 font-medium">Role</th>
               <th className="px-6 py-3 font-medium">Status</th>
@@ -85,26 +168,25 @@ export default function AnalyticsPage() {
             </tr>
           </thead>
           <tbody>
-            {REGISTRATIONS.map((r) => (
+            {displayRegistrations.map((r) => (
               <tr key={r.email} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <img src={r.avatar} alt={r.name} className="w-9 h-9 rounded-full object-cover" />
+                    {/* <img src={} alt={r.name} className="w-9 h-9 rounded-full object-cover" /> */}
                     <div>
                       <div className="font-medium text-slate-700">{r.name}</div>
                       <div className="text-slate-400 text-xs">{r.email}</div>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-slate-600">{r.org}</td>
                 <td className="px-6 py-4 text-slate-600">{r.date}</td>
                 <td className="px-6 py-4">
-                  <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${ROLE_STYLES[r.role]}`}>
+                  <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${ROLE_STYLES[r.role] ?? "bg-slate-100 text-slate-600"}`}>
                     {r.role}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_STYLES[r.status]}`}>
+                  <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_STYLES[r.status] ?? "bg-slate-50 text-slate-400"}`}>
                     {r.status}
                   </span>
                 </td>

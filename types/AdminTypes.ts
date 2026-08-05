@@ -13,7 +13,6 @@ type Status = keyof typeof STATUS_STYLES;
 export interface Registration {
   name: string;
   email: string;
-  avatar: string;
   org: string;
   date: string;
   role: Role;

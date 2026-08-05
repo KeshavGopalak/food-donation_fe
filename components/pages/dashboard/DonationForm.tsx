@@ -25,12 +25,6 @@ import { CurrentUser } from "@/types/dashboardTypes";
 import { fetchNearbyDonations, createDonation } from "@/services/dashboardServices";
 import { items } from "@/Constants/Dashboard";
 
-
-
-
-
-
-
 export default function DonationForm() {
   const queryClient = useQueryClient();
 
