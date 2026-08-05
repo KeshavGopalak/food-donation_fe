@@ -16,7 +16,6 @@ export interface User {
   email: string;
   avatar: string | null;
   initials?: string;
-  org: string;
   joinDate: string;
   role: Role;
   status: Status;

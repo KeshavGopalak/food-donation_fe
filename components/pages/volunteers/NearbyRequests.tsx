@@ -10,9 +10,12 @@ import {
 import Link from "next/link";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { requests } from "@/Constants/NearbyData";
+import { getDonations } from "@/services/volunteerServices";
+import { useDonations } from "@/hooks/auth/useDonation";
 
 
 export default function NearbyRequests() {
+  const { data } = useDonations();
   const position = { lat: 53.54992, lng: 10.00678 };
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
@@ -101,29 +104,31 @@ export default function NearbyRequests() {
               </div>
 
               <div className="flex flex-col gap-4">
-                {requests.map((r) => (
+                {data?.map((r) => (
                   <div
-                    key={r.id}
+                    key={r._id}
                     className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <span
-                        className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                          r.urgency === "urgent"
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {r.tag}
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        {r.distance}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-9 h-9 shrink-0 rounded-lg bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-semibold">
+                          {r.donorName.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="text-sm font-semibold text-gray-900">
+                          {r.donorName}
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {new Date(r.createdAt).toLocaleString()}
+                      </div>
                     </div>
                     <div className="font-semibold text-gray-900 text-sm mb-0.5">
-                      {r.title}
+                      {r.itemName} - {r.quantity} ({r.foodType})
                     </div>
-                    <div className="text-xs text-gray-400 mb-4">{r.detail}</div>
+                    <div className="text-xs text-gray-400 mb-1">
+                      Pickup Location: {r.pickupLocation}
+                    </div>
+                    <div className="text-xs text-gray-400 mb-4">{r.description}</div>
                     <div className="flex items-center gap-2">
                       <button className="flex-1 bg-emerald-600 text-white text-sm font-semibold py-2 rounded-lg hover:bg-emerald-700 transition-colors">
                         Accept Pickup

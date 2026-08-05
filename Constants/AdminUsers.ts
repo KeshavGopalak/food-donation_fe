@@ -4,7 +4,6 @@ export const REGISTRATIONS: Registration[] = [
   {
     name: "Julianne Decca",
     email: "julianne.d@example.com",
-    avatar: "https://i.pravatar.cc/64?img=32",
     org: "Decca Bakeries Inc.",
     date: "Oct 24, 2024",
     role: "Donor",
@@ -13,7 +12,7 @@ export const REGISTRATIONS: Registration[] = [
   {
     name: "Marcus Kane",
     email: "m.kane@logistics.org",
-    avatar: "https://i.pravatar.cc/64?img=15",
+
     org: "City Food Bank",
     date: "Oct 23, 2024",
     role: "Volunteer",
@@ -22,7 +21,7 @@ export const REGISTRATIONS: Registration[] = [
   {
     name: "Sarah Linn",
     email: "sarah@freshmarket.com",
-    avatar: "https://i.pravatar.cc/64?img=24",
+
     org: "Fresh Market Co.",
     date: "Oct 22, 2024",
     role: "Donor",
