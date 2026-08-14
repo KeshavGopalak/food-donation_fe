@@ -1,5 +1,5 @@
 import { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse } from "@/types/authTypes";
-import axios from "axios";
+import api from "@/api/axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -9,7 +9,7 @@ export const authService = {
    */
   login: async (credentials: LoginPayload): Promise<LoginResponse> => {
     try {
-      const res = await axios.post<LoginResponse>(`${API_BASE_URL}/api/auth/login`, credentials);
+      const res = await api.post<LoginResponse>(`${API_BASE_URL}/api/auth/login`, credentials, { withCredentials: true });
       return res.data;
     } catch (error:any) {
       const message = error.response?.data?.message || "Login failed";
@@ -18,7 +18,7 @@ export const authService = {
   },
   Register: async (credentials: RegisterPayload): Promise<RegisterResponse> => {
     try {
-      const res = await axios.post<RegisterResponse>(`${API_BASE_URL}/api/auth/register`, credentials);
+      const res = await api.post<RegisterResponse>(`${API_BASE_URL}/api/auth/register`, credentials, { withCredentials: true });
       return res.data;
     } catch (error:any) {
       const message = error.response?.data?.message || "Registration failed";
@@ -26,3 +26,4 @@ export const authService = {
     }
   }
 };
+

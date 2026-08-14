@@ -10,11 +10,13 @@ export const fetchNearbyDonations = async (): Promise<NearbyDonation[]> => {
   return data.donations || [];
 };
 export const createDonation = async (payload: any) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
   const response = await fetch(`${API_URL}/api/donations/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify(payload),
   });
@@ -26,3 +28,10 @@ export const createDonation = async (payload: any) => {
 
   return response.json();
 };
+
+export const getDonationCount = async (): Promise<number> => {
+  const response = await fetch(`${API_URL}/api/donations/count`);
+  if (!response.ok) throw new Error("Failed to fetch donation count");
+  const data = await response.json();
+  return data.count || 0;
+}

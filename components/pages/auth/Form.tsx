@@ -23,15 +23,10 @@ export default function LoginForm() {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
 
-      // Invalidate relevant queries in TanStack cache
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
-      // Navigate to dashboard
-      router.push("/dashboard");
+      router.push("/userdashboard/dashboard");
     },
   });
 
