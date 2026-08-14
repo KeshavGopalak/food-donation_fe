@@ -2,13 +2,13 @@ import type { NextConfig } from "next";
 
 
 const nextConfig: NextConfig = {
-   images: {
+  images: {
     remotePatterns: [
       {
-        hostname: 'image.kkday.com'
-      }
-    ]
-  }
+        hostname: 'image.kkday.com',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
