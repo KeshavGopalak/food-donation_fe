@@ -27,6 +27,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleLogout = () => {
     deleteLocalStorageItem('user');
+    deleteLocalStorageItem('authToken');
     document.cookie = 'session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
     document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
   };
@@ -34,12 +35,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const hasSession = document.cookie
+    const hasSession = !!localStorage.getItem('authToken') || document.cookie
       .split('; ')
       .some((cookie) => cookie.startsWith('session_id=') || cookie.startsWith('session_token='));
 
     if (!hasSession) {
-      router.replace('/login');
+      const loginUrl = new URL('/login', window.location.origin);
+      loginUrl.searchParams.set('callbackUrl', window.location.pathname);
+      router.replace(loginUrl.pathname + loginUrl.search);
       return;
     }
 

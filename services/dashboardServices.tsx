@@ -10,7 +10,7 @@ export const fetchNearbyDonations = async (): Promise<NearbyDonation[]> => {
   return data.donations || [];
 };
 export const createDonation = async (payload: any) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
   const response = await fetch(`${API_URL}/api/donations/create`, {
     method: "POST",

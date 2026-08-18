@@ -24,9 +24,15 @@ export default function LoginForm() {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
 
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
+      }
+
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
-      router.push("/userdashboard/dashboard");
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get("callbackUrl") || "/userdashboard/dashboard";
+      router.push(callbackUrl);
     },
   });
 
