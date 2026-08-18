@@ -9,12 +9,36 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
-import { requests } from "@/Constants/NearbyData";
-import { getDonations } from "@/services/volunteerServices";
 import { useDonations } from "@/hooks/auth/useDonation";
+import useState, { useEffect } from "react";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+const updateDonationStatus = async (donationId: string, status: string) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/api/donations/${donationId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update donation status");
+    }
+
+    const updatedDonation = await response.json();
+    console.log("Donation status updated:", updatedDonation);
+  } catch (error) {
+    console.error("Error updating donation status:", error);
+  }
+}
 
 export default function NearbyRequests() {
+
   const { data } = useDonations();
   const position = { lat: 53.54992, lng: 10.00678 };
   return (
@@ -130,8 +154,8 @@ export default function NearbyRequests() {
                     </div>
                     <div className="text-xs text-gray-400 mb-4">{r.description}</div>
                     <div className="flex items-center gap-2">
-                      <button className="flex-1 bg-emerald-600 text-white text-sm font-semibold py-2 rounded-lg hover:bg-emerald-700 transition-colors">
-                        Accept Pickup
+                      <button onClick={() => updateDonationStatus(r._id, "Pending Pickup")} className="flex-1 bg-emerald-600 text-white text-sm font-semibold py-2 rounded-lg hover:bg-emerald-700 transition-colors">
+                        {r.status === "Available" ? "Accept Request" : "Request Accepted"}
                       </button>
                       <span className="w-9 h-9 shrink-0 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 text-sm font-semibold">
                         A
