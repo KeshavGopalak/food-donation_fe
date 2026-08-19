@@ -19,3 +19,19 @@ export async function getDonations(): Promise<BackendDonation[]> {
   const data = await response.json();
   return data.donations ?? [];
 }
+
+export async function getDonationsByDonor(donorId: string): Promise<BackendDonation[]> {
+  const response = await fetch(`${API_BASE_URL}/api/donations/donor/${donorId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to fetch your donations: ${response.status} ${errorText}`);
+  }
+
+  const data = await response.json();
+  return data.donations ?? [];
+}
