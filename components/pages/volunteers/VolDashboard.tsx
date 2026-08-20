@@ -1,6 +1,8 @@
+"use client";
 import { Award, Bell, Clock, LayoutGrid, LogOut, MapPin, MoreVertical, Route, Search, Soup, Star, TrendingUp, Truck, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
-
+import React from "react";
+import { fetchPendingPickupRequests } from "@/services/volunteerServices";
 const weeklyActivity = [
   { day: "Mon", value: 45 },
   { day: "Tue", value: 60 },
@@ -11,8 +13,23 @@ const weeklyActivity = [
   { day: "Sun", value: 40 },
 ];
 
+
+ 
+
 export default function VolDashboard() {
+  const [pendingPickupRequests, setPendingPickupRequests] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const requests = await fetchPendingPickupRequests();
+      setPendingPickupRequests(requests.donations || []);
+    }
+
+    fetchData();
+  }, []);
   return (
+
+
     <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
       {/* Sidebar */}
       <aside className="w-60 bg-emerald-950 shrink-0 flex flex-col p-4">
@@ -90,7 +107,9 @@ export default function VolDashboard() {
                   +12%
                 </span>
               </div>
-              <div className="text-2xl font-bold text-gray-900">148</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {pendingPickupRequests.length > 0 ? pendingPickupRequests.length : 0}
+              </div>
               <div className="text-xs text-gray-400 mt-1">Total Deliveries</div>
             </div>
 
