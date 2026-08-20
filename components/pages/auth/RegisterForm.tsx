@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useRegister } from "@/hooks/auth/useRegister";
 export default function RegisterForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [role, setRole] = useState<"user" | "volunteer">("user");
+  const [experience, setExperience] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [skills, setSkills] = useState("");
+  const [transportation, setTransportation] = useState("");
   const { mutate: register, isPending, error } = useRegister();
 
   return (
@@ -25,10 +28,40 @@ export default function RegisterForm() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          register({ name, email, password });
+          register({
+            name,
+            email,
+            password,
+            role,
+            ...(role === "volunteer" ? {
+              volunteerDetails: { experience, availability, skills, transportation },
+            } : {}),
+          });
         }}
         className="space-y-5"
       >
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">Account type</label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value as "user" | "volunteer")}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-textgreen focus:border-transparent text-sm"
+          >
+            <option value="user">Donor / User</option>
+            <option value="volunteer">Volunteer</option>
+          </select>
+        </div>
+
+        {role === "volunteer" && (
+          <div className="space-y-4 rounded-lg border border-emerald-100 bg-emerald-50/50 p-4">
+            <p className="text-sm font-medium text-emerald-900">Volunteer details</p>
+            <input value={experience} onChange={(e) => setExperience(e.target.value)} placeholder="Relevant experience" className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm" required />
+            <input value={availability} onChange={(e) => setAvailability(e.target.value)} placeholder="Availability (for example, weekends)" className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm" required />
+            <input value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="Skills or certifications" className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm" required />
+            <input value={transportation} onChange={(e) => setTransportation(e.target.value)} placeholder="Transportation details" className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm" required />
+          </div>
+        )}
+
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">
             Full name

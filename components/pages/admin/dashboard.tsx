@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Search, ChevronDown, UserPlus, MoreVertical, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import Layout from "./layout";
-import { createAdminUser, getAllAdminUsers, getDonationsByDonor } from "@/services/adminServices";
+import { createAdminUser, getAllAdminUsers, getDonationsByDonor, updateAdminUser } from "@/services/adminServices";
 
 interface AdminUser {
   _id: string;
@@ -186,26 +186,32 @@ export default function UsersPage() {
   const openUserDetails = (user: AdminUser) => setSelectedUser(user);
   const closeUserDetails = () => setSelectedUser(null);
 
-  const updateStatus = (userId: string, status: string, verified?: boolean) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user._id === userId ? { ...user, status, ...(verified != null ? { verified } : {}) } : user
-      )
-    );
-
-    if (selectedUser?._id === userId) {
-      setSelectedUser({ ...selectedUser, status, ...(verified != null ? { verified } : {}) });
+  const updateStatus = async (userId: string, status: string, verified: boolean) => {
+    try {
+      const updatedUser = await updateAdminUser(userId, { status, verified });
+      setUsers((prev) => prev.map((user) => user._id === userId ? { ...user, ...updatedUser } : user));
+      if (selectedUser?._id === userId) setSelectedUser({ ...selectedUser, ...updatedUser });
+    } catch (error: any) {
+      setFetchError(error?.message ?? "Unable to update user.");
     }
   };
 
   const handleApprove = () => {
     if (!selectedUser) return;
-    updateStatus(selectedUser._id, "Active", true);
+    void updateStatus(selectedUser._id, "Active", true);
   };
 
   const handleDeny = () => {
     if (!selectedUser) return;
-    updateStatus(selectedUser._id, "Denied", false);
+    void updateStatus(selectedUser._id, "Denied", false);
+  };
+
+  const handlePromote = () => {
+    if (!selectedUser || selectedUser.role.toLowerCase() === "volunteer") return;
+    void updateAdminUser(selectedUser._id, { role: "volunteer", status: "active", verified: true }).then((updatedUser) => {
+      setUsers((prev) => prev.map((user) => user._id === selectedUser._id ? { ...user, ...updatedUser } : user));
+      setSelectedUser((current) => current?._id === selectedUser._id ? { ...current, ...updatedUser } : current);
+    }).catch((error: any) => setFetchError(error?.message ?? "Unable to promote user."));
   };
 
   return (
@@ -430,8 +436,6 @@ export default function UsersPage() {
                     <option>User</option>
                     <option>Volunteer</option>
                     <option>Admin</option>
-                    <option>Donor</option>
-                    <option>Shelter</option>
                   </select>
                 </label>
               </div>
@@ -558,6 +562,15 @@ export default function UsersPage() {
                   >
                     Deny
                   </button>
+                  {selectedUser.role.toLowerCase() === "user" && (
+                    <button
+                      type="button"
+                      onClick={handlePromote}
+                      className="rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700 hover:bg-sky-100"
+                    >
+                      Promote to volunteer
+                    </button>
+                  )}
                 </div>
               </div>
 

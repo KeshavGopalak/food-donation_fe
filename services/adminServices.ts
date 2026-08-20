@@ -73,7 +73,7 @@ export interface CreateAdminUserPayload {
 }
 
 export async function createAdminUser(payload: CreateAdminUserPayload): Promise<BackendAdminUser> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+  const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export async function createAdminUser(payload: CreateAdminUserPayload): Promise<
 
 export async function updateAdminUser(
   userId: string,
-  payload: { status?: string; verified?: boolean }
+  payload: { status?: string; verified?: boolean; role?: string }
 ): Promise<BackendAdminUser> {
   const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
     method: "PATCH",

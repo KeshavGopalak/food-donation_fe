@@ -30,9 +30,12 @@ export default function LoginForm() {
 
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
-      const params = new URLSearchParams(window.location.search);
-      const callbackUrl = params.get("callbackUrl") || "/userdashboard/dashboard";
-      router.push(callbackUrl);
+      const destination = data.user.role === "admin"
+        ? "/admin-dashboard"
+        : data.user.role === "volunteer"
+          ? "/volunteerdashboard"
+          : "/userdashboard/dashboard";
+      router.push(destination);
     },
   });
 
