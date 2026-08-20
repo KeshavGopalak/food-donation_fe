@@ -13,35 +13,8 @@ import Link from "next/link";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { useDonations } from "@/hooks/auth/useDonation";
 import { useState } from "react";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { updateDonationStatus } from "@/services/volunteerServices";
 
-
-
-const updateDonationStatus = async (donationId: string, status: string) => {
-  try {
-    const response = await fetch(
-      `${API_URL}/api/donations/${donationId}/status`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update donation status");
-    }
-
-    const updatedDonation = await response.json();
-    console.log("Donation status updated:", updatedDonation);
-    return true;
-  } catch (error) {
-    console.error("Error updating donation status:", error);
-    return false;
-  }
-};
 
 export default function NearbyRequests() {
 

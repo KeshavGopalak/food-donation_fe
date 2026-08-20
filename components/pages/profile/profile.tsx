@@ -6,24 +6,12 @@ import Link from "next/link";
 import { getDonationsByDonor } from "@/services/volunteerServices";
 import type { BackendDonation } from "@/types/volunteerTypes";
 import { updateProfile } from "@/services/authServices";
+import type { EditableField, StoredUser } from "@/types/profileTypes";
+import { displayRole, formatDate, initials } from "@/services/profileServices";
 
-type StoredUser = {
-  _id?: string;
-  id?: string;
-  name?: string;
-  email?: string;
-  role?: string;
-  status?: string;
-  verified?: boolean;
-  createdAt?: string;
-  avatarUrl?: string | null;
-};
 
-type EditableField = "name" | "email" | "avatar";
 
-const displayRole = (role?: string) => role ? role.charAt(0).toUpperCase() + role.slice(1) : "Donor";
-const initials = (name?: string) => (name || "User").split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase();
-const formatDate = (date?: string) => date ? new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(date)) : "Not available";
+
 
 export default function Profile() {
   const [user, setUser] = useState<StoredUser | null>(null);

@@ -2,7 +2,7 @@
 import { Award, Bell, Clock, LayoutGrid, LogOut, MapPin, MoreVertical, Route, Search, Soup, Star, TrendingUp, Truck, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-
+import { fetchPendingPickupRequests } from "@/services/volunteerServices";
 const weeklyActivity = [
   { day: "Mon", value: 45 },
   { day: "Tue", value: 60 },
@@ -13,20 +13,7 @@ const weeklyActivity = [
   { day: "Sun", value: 40 },
 ];
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-const fetchPendingPickupRequests = async () => {
-  try {
-    const response = await fetch(`${API_URL}/api/donations/search/status/Pending%20Pickup`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch pending pickup requests");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching pending pickup requests:", error);
-    return [];
-  }
-};
+
  
 
 export default function VolDashboard() {
