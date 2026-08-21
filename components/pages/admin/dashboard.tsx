@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search, ChevronDown, UserPlus, MoreVertical, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import Layout from "./layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { createAdminUser, getAllAdminUsers, getDonationsByDonor, updateAdminUser } from "@/services/adminServices";
+import { queryKeys } from "@/services/queries/queryKeys";
 
 interface AdminUser {
   _id: string;
@@ -102,17 +106,31 @@ function formatDate(dateString: string) {
 }
 
 export default function UsersPage() {
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [verifiedFilter, setVerifiedFilter] = useState("All Verification");
-  const [users, setUsers] = useState<AdminUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const {
+    data: users = [],
+    isLoading: loading,
+    error: usersError,
+  } = useQuery({
+    queryKey: queryKeys.admin.users,
+    queryFn: getAllAdminUsers,
+  });
+  const fetchError = usersError?.message ?? null;
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
-  const [userDonations, setUserDonations] = useState<DonationHistoryItem[]>([]);
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [historyError, setHistoryError] = useState<string | null>(null);
+  const {
+    data: userDonations = [],
+    isLoading: historyLoading,
+    error: donationHistoryError,
+  } = useQuery({
+    queryKey: queryKeys.donations.byDonor(selectedUser?._id ?? ""),
+    queryFn: () => getDonationsByDonor(selectedUser?._id ?? ""),
+    enabled: Boolean(selectedUser),
+  });
+  const historyError = donationHistoryError?.message ?? null;
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -123,36 +141,13 @@ export default function UsersPage() {
   const [addUserError, setAddUserError] = useState<string | null>(null);
   const [creatingUser, setCreatingUser] = useState(false);
 
-  useEffect(() => {
-    getAllAdminUsers()
-      .then((users) => {
-        setUsers(users);
-        setFetchError(null);
-      })
-      .catch((error) => {
-        setFetchError(error?.message ?? "Unable to fetch users.");
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    if (!selectedUser) {
-      setUserDonations([]);
-      setHistoryError(null);
-      return;
-    }
-
-    setHistoryLoading(true);
-    getDonationsByDonor(selectedUser._id)
-      .then((donations) => {
-        setUserDonations(donations);
-        setHistoryError(null);
-      })
-      .catch((error) => {
-        setHistoryError(error?.message ?? "Unable to load donation history.");
-      })
-      .finally(() => setHistoryLoading(false));
-  }, [selectedUser]);
+  const updateUserMutation = useMutation({
+    mutationFn: ({ userId, payload }: { userId: string; payload: { status?: string; verified?: boolean; role?: string } }) =>
+      updateAdminUser(userId, payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.admin.users });
+    },
+  });
 
   const filteredUsers = users.filter((user) => {
     const query = search.trim().toLowerCase();
@@ -188,11 +183,9 @@ export default function UsersPage() {
 
   const updateStatus = async (userId: string, status: string, verified: boolean) => {
     try {
-      const updatedUser = await updateAdminUser(userId, { status, verified });
-      setUsers((prev) => prev.map((user) => user._id === userId ? { ...user, ...updatedUser } : user));
-      if (selectedUser?._id === userId) setSelectedUser({ ...selectedUser, ...updatedUser });
-    } catch (error: any) {
-      setFetchError(error?.message ?? "Unable to update user.");
+      await updateUserMutation.mutateAsync({ userId, payload: { status, verified } });
+    } catch (error) {
+      console.error("Unable to update user:", error);
     }
   };
 
@@ -208,23 +201,23 @@ export default function UsersPage() {
 
   const handlePromote = () => {
     if (!selectedUser || selectedUser.role.toLowerCase() === "volunteer") return;
-    void updateAdminUser(selectedUser._id, { role: "volunteer", status: "active", verified: true }).then((updatedUser) => {
-      setUsers((prev) => prev.map((user) => user._id === selectedUser._id ? { ...user, ...updatedUser } : user));
-      setSelectedUser((current) => current?._id === selectedUser._id ? { ...current, ...updatedUser } : current);
-    }).catch((error: any) => setFetchError(error?.message ?? "Unable to promote user."));
+    void updateUserMutation.mutateAsync({
+      userId: selectedUser._id,
+      payload: { role: "volunteer", status: "active", verified: true },
+    }).catch((error) => console.error("Unable to promote user:", error));
   };
 
   return (
     <Layout activePage="users" pageTitle="User Management">
       {/* Controls row */}
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-wrap items-center gap-3 mb-6">
         <div className="flex-1 relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
+          <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search users or organizations..."
-            className="w-full pl-9 pr-4 py-2.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+            className="w-full pl-9 pr-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
           />
         </div>
 
@@ -247,18 +240,18 @@ export default function UsersPage() {
           onChange={(value) => setVerifiedFilter(value)}
         />
 
-        <button
+        <Button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 transition-colors text-white text-sm font-medium rounded-lg px-4 py-2.5 whitespace-nowrap"
+          className="h-10 flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-colors text-white text-sm font-medium rounded-xl px-4 whitespace-nowrap shadow-sm shadow-indigo-900/15"
         >
           <UserPlus className="w-4 h-4" />
           Add User
-        </button>
+        </Button>
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm shadow-slate-900/5">
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-100">
@@ -297,17 +290,17 @@ export default function UsersPage() {
                 const roleClass = ROLE_STYLE_MAP[roleLabel] ?? ROLE_STYLE_MAP.User;
 
                 return (
-                  <tr
+                        <tr
                     key={user._id}
                     onClick={() => openUserDetails(user)}
-                    className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 cursor-pointer"
+                    className="border-b border-slate-100 last:border-0 hover:bg-indigo-50/40 cursor-pointer transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {user.avatar ? (
                           <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full object-cover" />
                         ) : (
-                          <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-semibold">
+                          <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-semibold">
                             {getInitials(user.name)}
                           </div>
                         )}
@@ -333,7 +326,7 @@ export default function UsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-2 text-xs ${user.verified ? "text-emerald-600" : "text-slate-500"}`}>
+                      <span className={`inline-flex items-center gap-2 text-xs ${user.verified ? "text-indigo-600" : "text-slate-500"}`}>
                         {user.verified ? "Verified" : "Unverified"}
                       </span>
                     </td>
@@ -487,7 +480,7 @@ export default function UsersPage() {
                         status: newStatus,
                         verified: newVerified,
                       });
-                      setUsers((prev) => [createdUser, ...prev]);
+                      queryClient.setQueryData<AdminUser[]>(queryKeys.admin.users, (currentUsers = []) => [createdUser, ...currentUsers]);
                       setIsAddModalOpen(false);
                       setNewName("");
                       setNewEmail("");

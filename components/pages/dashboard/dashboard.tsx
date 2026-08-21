@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import {
   UtensilsCrossed,
@@ -22,24 +23,15 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { getDonationCount } from '@/services/dashboardServices';
+import { queryKeys } from '@/services/queries/queryKeys';
 export default function Dashboard() {
- const [donationCount, setDonationCount] = useState<number>(0);
-
-  useEffect(() => {
-    const fetchDonationCount = async () => {
-      try {
-        const count = await getDonationCount();
-        setDonationCount(count);
-      } catch (error) {
-        console.error('Failed to fetch donation count:', error);
-      }
-    };
-
-    fetchDonationCount();
-  }, []);
+  const { data: donationCount = 0 } = useQuery({
+    queryKey: queryKeys.donations.count,
+    queryFn: getDonationCount,
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
+    <div className="min-h-screen bg-emerald-50/40 flex font-sans text-slate-900">
       {/* Sidebar */}
 
       {/* Main column */}
@@ -49,7 +41,7 @@ export default function Dashboard() {
         <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
           {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-emerald-100 p-5 shadow-sm shadow-emerald-950/5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-gray-500 font-medium">Active Donations</span>
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
@@ -63,7 +55,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-amber-100 p-5 shadow-sm shadow-amber-950/5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-gray-500 font-medium">Meals Shared</span>
                 <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
@@ -74,7 +66,7 @@ export default function Dashboard() {
               <div className="text-xs text-gray-400">Lifetime Impact</div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-gray-500 font-medium">Shelters Supported</span>
                 <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -90,18 +82,18 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Left column */}
             <div className="lg:col-span-1 flex flex-col gap-4">
-              <div className="bg-emerald-600 rounded-xl p-5 text-white">
+              <div className="bg-linear-to-br from-emerald-700 to-emerald-900 rounded-2xl p-6 text-white shadow-lg shadow-emerald-950/15">
                 <h3 className="text-lg font-bold mb-2">Ready to share?</h3>
                 <p className="text-sm text-emerald-50 leading-relaxed mb-5">
                   Submit your excess inventory and our logistics team will handle the rest.
                 </p>
-                <button className="bg-white text-emerald-700 text-sm font-semibold px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-emerald-50 transition-colors">
+                <button className="bg-white text-emerald-700 text-sm font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 hover:bg-emerald-50 transition-colors shadow-sm">
                   Donate Food
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+              <div className="bg-white rounded-2xl border border-emerald-100 p-5 shadow-sm shadow-emerald-950/5">
                 <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Insights</h3>
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
@@ -133,7 +125,7 @@ export default function Dashboard() {
 
               <div className="flex flex-col gap-4">
                 {/* Tracking 1 */}
-                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <div className="bg-white rounded-2xl border border-emerald-100 p-5 shadow-sm shadow-emerald-950/5">
                   <div className="flex items-start justify-between mb-4 gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
@@ -174,7 +166,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Tracking 2 */}
-                <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <div className="bg-white rounded-2xl border border-amber-100 p-5 shadow-sm shadow-amber-950/5">
                   <div className="flex items-start justify-between mb-4 gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center shrink-0">

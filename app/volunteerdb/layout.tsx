@@ -1,18 +1,15 @@
 "use client";
 
 import {
-  UtensilsCrossed,
   LayoutGrid,
-  Table2,
-  Plus,
-  HelpCircle,
   LogOut,
-  Search,
-  Bell
+  Bell,
+  LocateIcon,
+  MapPinned
 } from 'lucide-react';
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const deleteLocalStorageItem = (key: string) => {
   if (typeof window !== 'undefined') {
@@ -22,6 +19,7 @@ const deleteLocalStorageItem = (key: string) => {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isChecking, setIsChecking] = useState(true);
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -50,18 +48,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        if (parsedUser?.role === 'admin' || parsedUser?.role === 'volunteer') {
-          router.replace(parsedUser.role === 'admin' ? '/admin-dashboard' : '/volunteerdashboard');
+        if (parsedUser?.role === 'admin' || parsedUser?.role === 'user') {
+          router.replace(parsedUser.role === 'admin' ? '/admindb/dashboard' : '/userdb/dashboard');
           return;
         }
-        setUserName(parsedUser?.name ?? null);
+        window.setTimeout(() => setUserName(parsedUser?.name ?? null), 0);
       } catch (error) {
         console.error('Failed to parse stored user:', error);
-        setUserName(null);
+        window.setTimeout(() => setUserName(null), 0);
       }
     }
 
-    setIsChecking(false);
+    window.setTimeout(() => setIsChecking(false), 0);
   }, [router]);
 
   if (isChecking) {
@@ -76,46 +74,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
+    <div className="min-h-screen bg-sky-50/60 flex font-sans text-gray-900">
       {/* Sidebar */}
-      <aside className="w-60 bg-emerald-950 shrink-0 flex flex-col p-4">
-        <div className="flex items-center gap-3 px-2 py-3 mb-8">
-          <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center shrink-0">
-            <UtensilsCrossed className="w-5 h-5 text-white" />
+      <aside className="w-64 bg-linear-to-b from-sky-950 via-cyan-950 to-sky-900 shrink-0 flex flex-col p-5">
+        <div className="flex items-center gap-3 px-1 py-2 mb-10">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-400/15 ring-1 ring-cyan-200/20 flex items-center justify-center shrink-0">
+            <MapPinned className="w-5 h-5 text-white" />
           </div>
           <div className="leading-tight">
             <div className="text-white font-semibold text-sm">Vitality Hub</div>
-            <div className="text-emerald-300 text-xs">Logistics Panel</div>
+            <div className="text-sky-300 text-xs">Logistics Panel</div>
           </div>
         </div>
 
-        <nav className="flex flex-col gap-1">
+        <div className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-200/60">Dispatch</div>
+        <nav className="flex flex-col gap-2">
           <Link
-            href="/userdashboard/dashboard"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium"
+            href="/volunteerdb/dashboard"
+            aria-current={pathname === '/volunteerdb/dashboard' ? 'page' : undefined}
+            className={`flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium transition-all ${pathname === '/volunteerdb/dashboard' ? 'bg-cyan-400 text-sky-950 shadow-lg shadow-sky-950/30' : 'text-cyan-100/75 hover:bg-white/10 hover:text-white'}`}
           >
             <LayoutGrid className="w-4 h-4" />
             Overview
           </Link>
           <Link
-            href="/userdashboard/donations"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-300 text-sm font-medium hover:bg-emerald-900 transition-colors"
+            href="/volunteerdb/nearby-requests"
+            aria-current={pathname.startsWith('/volunteerdb/nearby-requests') ? 'page' : undefined}
+            className={`flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium transition-all ${pathname.startsWith('/volunteerdb/nearby-requests') ? 'bg-cyan-400 text-sky-950 shadow-lg shadow-sky-950/30' : 'text-cyan-100/75 hover:bg-white/10 hover:text-white'}`}
           >
-            <Table2 className="w-4 h-4" />
-            Donations
+            <LocateIcon className="w-4 h-4" />
+            Nearby Requests
           </Link>
         </nav>
 
-        <div className="mt-auto flex flex-col gap-1">
-          <Link href="/userdashboard/donations" className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold mb-4 hover:bg-emerald-700 transition-colors">
-            <Plus className="w-4 h-4" />
-            New Donation
-          </Link>
-          <a href="#" className="flex items-center gap-3 px-3 py-2 text-emerald-400 text-sm">
-            <HelpCircle className="w-4 h-4" />
-            Help Center
-          </a>
-          <Link href="/" onClick={handleLogout} className="flex items-center gap-3 px-3 py-2 text-red-400 text-sm">
+        <div className="mt-auto flex flex-col gap-3 border-t border-cyan-200/15 pt-4">
+          <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3 text-xs text-cyan-50">
+            <span className="h-2 w-2 rounded-full bg-lime-300 shadow-[0_0_0_4px_rgba(190,242,100,0.12)]" />
+            Available to help
+          </div>
+          <Link href="/" onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-red-200 text-sm hover:bg-white/10 transition-colors">
             <LogOut className="w-4 h-4" />
             Logout
           </Link>
@@ -125,17 +122,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main column */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0">
+        <header className="h-16 bg-white/90 border-b border-sky-100 flex items-center justify-between px-6 shrink-0">
           <h1 className="text-lg font-bold text-gray-900">Vitality Logistics</h1>
           <div className="flex items-center gap-4">
-            <div className="relative hidden sm:block">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search trackings..."
-                className="pl-9 pr-4 py-2 bg-gray-100 rounded-lg text-sm w-56 outline-none placeholder-gray-400"
-              />
-            </div>
             <button className="text-gray-400 hover:text-gray-600 transition-colors">
               <Bell className="w-5 h-5" />
             </button>

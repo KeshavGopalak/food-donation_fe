@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, MoreVertical } from "lucide-react";
 import Layout from "./layout";
 import { REGISTRATIONS, WEEK_DATA } from "@/Constants/AdminUsers";
 import { STAT_CARDS, StatCardData } from "@/Constants/AnalyticsData";
 import { getAllAdminUsers } from "@/services/adminServices";
 import { ROLE_STYLES, STATUS_STYLES } from "@/types/AdminTypes";
+import { queryKeys } from "@/services/queries/queryKeys";
 
 interface RecentRegistration {
   name: string;
@@ -61,33 +62,23 @@ function formatDate(dateString: string) {
 }
 
 export default function AnalyticsPage() {
-  const [registrations, setRegistrations] = useState<RecentRegistration[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const { data: registrations = [] } = useQuery({
+    queryKey: queryKeys.admin.users,
+    queryFn: async () => {
+      const users = await getAllAdminUsers();
+      return users
+        .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
+        .slice(0, 5)
+        .map((user) => ({
+          name: user.name,
+          email: user.email,
+          date: formatDate(user.createdAt),
+          role: normalizeRole(user.role),
+          status: normalizeStatus(user.status),
+        }));
+    },
+  });
   const maxValue = Math.max(...WEEK_DATA.map((d) => d.value));
-
-  useEffect(() => {
-    getAllAdminUsers()
-      .then((users) => {
-        const recent = users
-          .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
-          .slice(0, 5)
-          .map((user) => ({
-            name: user.name,
-            email: user.email,
-            date: formatDate(user.createdAt),
-            role: normalizeRole(user.role),
-            status: normalizeStatus(user.status),
-          }));
-
-        setRegistrations(recent);
-        setFetchError(null);
-      })
-      .catch((error) => {
-        setFetchError(error?.message ?? "Unable to fetch recent registrations.");
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   const displayRegistrations = registrations.length > 0 ? registrations : REGISTRATIONS;
 
@@ -102,7 +93,7 @@ export default function AnalyticsPage() {
 
       {/* Chart + hotspots */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-5">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm shadow-slate-900/5">
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-semibold text-slate-700">Weekly Donation Trends</h2>
             <button className="flex items-center gap-1.5 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-600">
@@ -116,12 +107,12 @@ export default function AnalyticsPage() {
                 <div className="w-full flex items-end h-32">
                   <div
                     className={`w-full rounded-t-md transition-all ${
-                      d.day === "Thu" ? "bg-emerald-600" : "bg-emerald-100"
+                        d.day === "Thu" ? "bg-indigo-600" : "bg-indigo-100"
                     }`}
                     style={{ height: `${(d.value / maxValue) * 100}%` }}
                   />
                 </div>
-                <span className={`text-xs ${d.day === "Thu" ? "text-emerald-700 font-medium" : "text-slate-400"}`}>
+                <span className={`text-xs ${d.day === "Thu" ? "text-indigo-700 font-medium" : "text-slate-400"}`}>
                   {d.day}
                 </span>
               </div>
@@ -129,17 +120,17 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm shadow-slate-900/5">
           <h2 className="font-semibold text-slate-700 mb-4">Pickup Hotspots</h2>
-          <div className="relative h-40 rounded-lg overflow-hidden bg-linear-to-br from-emerald-800 to-slate-700">
+          <div className="relative h-40 rounded-xl overflow-hidden bg-linear-to-br from-indigo-950 to-slate-800">
             <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 140" fill="none">
               <path d="M0 40 H200 M0 80 H200 M0 110 H200 M40 0 V140 M90 0 V140 M140 0 V140" stroke="white" strokeWidth="0.5" />
             </svg>
-            <div className="absolute w-16 h-16 rounded-full bg-emerald-400/30 blur-xl top-6 left-10" />
+            <div className="absolute w-16 h-16 rounded-full bg-indigo-400/30 blur-xl top-6 left-10" />
             <div className="absolute w-12 h-12 rounded-full bg-amber-400/40 blur-xl bottom-4 right-8" />
             <div className="absolute bottom-3 left-3 bg-white/95 rounded-md px-2.5 py-1.5 text-xs flex flex-col gap-1">
-              <span className="flex items-center gap-1.5 text-slate-600">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> High Activity
+                <span className="flex items-center gap-1.5 text-slate-600">
+                <span className="w-2 h-2 rounded-full bg-indigo-500" /> High Activity
               </span>
               <span className="flex items-center gap-1.5 text-slate-600">
                 <span className="w-2 h-2 rounded-full bg-amber-400" /> Critical Need
@@ -150,7 +141,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Recent registrations */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm shadow-slate-900/5">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <h2 className="font-semibold text-slate-700">Recent Registrations</h2>
           <a href="/users" className="text-xs font-medium text-emerald-600 hover:text-emerald-700">

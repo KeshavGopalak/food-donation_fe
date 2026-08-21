@@ -4,6 +4,7 @@ export interface BackendAdminUser {
   _id: string;
   name: string;
   email: string;
+  avatar?: string | null;
   role: string;
   status: string;
   verified: boolean;

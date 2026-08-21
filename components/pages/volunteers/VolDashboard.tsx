@@ -3,7 +3,9 @@ import { Award, Bell, Clock, LayoutGrid, LogOut, MapPin, MoreVertical, Route, Se
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { fetchPendingPickupRequests } from "@/services/volunteerServices";
+import { queryKeys } from "@/services/queries/queryKeys";
 const weeklyActivity = [
   { day: "Mon", value: 45 },
   { day: "Tue", value: 60 },
@@ -20,7 +22,13 @@ const weeklyActivity = [
 export default function VolDashboard() {
   const router = useRouter();
   const [isChecking, setIsChecking] = React.useState(true);
-  const [pendingPickupRequests, setPendingPickupRequests] = React.useState<any[]>([]);
+  const { data: pendingPickupRequests = [] } = useQuery({
+    queryKey: queryKeys.donations.pendingPickup,
+    queryFn: async () => {
+      const requests = await fetchPendingPickupRequests();
+      return requests.donations || [];
+    },
+  });
 
   React.useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -36,85 +44,23 @@ export default function VolDashboard() {
       return;
     }
 
-    const fetchData = async () => {
-      const requests = await fetchPendingPickupRequests();
-      setPendingPickupRequests(requests.donations || []);
-    }
-
-    fetchData();
   }, [router]);
   if (isChecking) return <div className="min-h-screen bg-gray-50" />;
   return (
 
 
-    <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
-      {/* Sidebar */}
-      <aside className="w-60 bg-emerald-950 shrink-0 flex flex-col p-4">
-        <div className="flex items-center gap-3 px-2 py-3 mb-8">
-          <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center shrink-0">
-            <UtensilsCrossed className="w-5 h-5 text-white" />
-          </div>
-          <div className="leading-tight">
-            <div className="text-white font-semibold text-sm">Vitality Hub</div>
-            <div className="text-emerald-300 text-xs">Logistics Panel</div>
-          </div>
-        </div>
-
-        <nav className="flex flex-col gap-1">
-          <Link
-            href="/volunteerdashboard"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium transition-colors"
-          >
-            <LayoutGrid className="w-4 h-4" />
-            Overview
-          </Link>
-          <Link
-            href="/nearby-requests"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-300 text-sm font-medium hover:bg-emerald-900 transition-colors"
-          >
-            <MapPin className="w-4 h-4" />
-            Nearby Requests
-          </Link>
-        </nav>
-
-        <div className="mt-auto flex flex-col gap-1">
-          <a href="#" className="flex items-center gap-3 px-3 py-2 text-red-400 text-sm">
-            <LogOut className="w-4 h-4" />
-            Logout
-          </a>
-        </div>
-      </aside>
+    <div className="min-h-screen bg-sky-50/60 flex font-sans text-slate-900">
+     
 
       {/* Main column */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0">
-          <h1 className="text-lg font-bold text-gray-900">Volunteer Dashboard</h1>
-          <div className="flex items-center gap-4">
-            <div className="relative hidden sm:block">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search deliveries..."
-                className="pl-9 pr-4 py-2 bg-gray-100 rounded-lg text-sm w-56 outline-none placeholder-gray-400"
-              />
-            </div>
-            <button className="text-gray-400 hover:text-gray-600 transition-colors">
-              <Bell className="w-5 h-5" />
-            </button>
-            <Link href="/profile" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-full bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                JD
-              </div>
-            </Link>
-          </div>
-        </header>
+        
 
         {/* Content */}
         <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
           {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center">
                   <Truck className="w-4 h-4 text-emerald-600" />
@@ -130,7 +76,7 @@ export default function VolDashboard() {
               <div className="text-xs text-gray-400 mt-1">Total Deliveries</div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center">
                   <Route className="w-4 h-4 text-amber-600" />
@@ -141,7 +87,7 @@ export default function VolDashboard() {
               <div className="text-xs text-gray-400 mt-1">Total Distance</div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center">
                   <Soup className="w-4 h-4 text-purple-600" />
@@ -154,7 +100,7 @@ export default function VolDashboard() {
               <div className="text-xs text-gray-400 mt-1">Meals Saved</div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center">
                   <Star className="w-4 h-4 text-blue-600" />
@@ -168,7 +114,7 @@ export default function VolDashboard() {
 
           {/* Analytics row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-            <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="lg:col-span-2 bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-base font-semibold text-gray-900">Impact Analytics</h3>
@@ -182,7 +128,7 @@ export default function VolDashboard() {
                 {weeklyActivity.map((d) => (
                   <div key={d.day} className="flex-1 flex flex-col items-center justify-end h-full">
                     <div
-                      className="w-full rounded-t-md bg-emerald-500/80"
+                      className="w-full rounded-t-md bg-cyan-500/80"
                       style={{ height: `${d.value}%` }}
                     />
                   </div>
@@ -196,7 +142,7 @@ export default function VolDashboard() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+              <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
                     <Clock className="w-4 h-4 text-blue-600" />
@@ -212,7 +158,7 @@ export default function VolDashboard() {
                 <div className="text-xs text-gray-400 mt-2">5% faster than last month</div>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+              <div className="bg-white rounded-2xl border border-sky-100 p-5 shadow-sm shadow-sky-950/5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
                     <Award className="w-4 h-4 text-amber-600" />
@@ -229,7 +175,7 @@ export default function VolDashboard() {
           </div>
 
           {/* Recent activity */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="bg-white rounded-2xl border border-sky-100 shadow-sm shadow-sky-950/5">
             <div className="flex items-center justify-between p-5">
               <h3 className="text-base font-semibold text-gray-900">Recent Activity</h3>
               <a href="#" className="text-sm text-emerald-600 font-medium hover:underline">View All History</a>

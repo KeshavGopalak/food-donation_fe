@@ -7,6 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { LoginPayload, LoginResponse } from "@/types/authTypes";
 import { authService } from "@/services/authServices";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -31,10 +33,10 @@ export default function LoginForm() {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
       const destination = data.user.role === "admin"
-        ? "/admin-dashboard"
+        ? "/admindb/dashboard"
         : data.user.role === "volunteer"
-          ? "/volunteerdashboard"
-          : "/userdashboard/dashboard";
+          ? "/volunteerdb/dashboard"
+          : "/userdb/dashboard";
       router.push(destination);
     },
   });
@@ -56,7 +58,7 @@ export default function LoginForm() {
       <form onSubmit={handleLogin} className="space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">Email Address</label>
-          <input
+          <Input
             type="email"
             placeholder="name@company.com"
             value={email}
@@ -68,7 +70,7 @@ export default function LoginForm() {
 
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">Password</label>
-          <input
+          <Input
             type="password"
             placeholder="••••••••"
             value={password}
@@ -93,13 +95,13 @@ export default function LoginForm() {
           </Link>
         </div>
 
-        <button
+        <Button
           type="submit"
-          className="w-full bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold py-3 rounded-lg transition-colors mt-6 disabled:opacity-50"
+          className="w-full h-11 bg-textwhite hover:bg-darkgreen hover:text-textwhite text-darkgreen font-semibold rounded-lg transition-colors mt-6"
           disabled={loginMutation.isPending}
         >
           {loginMutation.isPending ? "Logging in..." : "Login"}
-        </button>
+        </Button>
       </form>
 
       {loginMutation.isError && (

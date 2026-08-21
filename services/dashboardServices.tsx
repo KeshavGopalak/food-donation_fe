@@ -35,3 +35,10 @@ export const getDonationCount = async (): Promise<number> => {
   const data = await response.json();
   return data.count || 0;
 }
+
+export const getDatabaseMessage = async (): Promise<string> => {
+  const response = await fetch(`${API_URL}/api/database`);
+  if (!response.ok) throw new Error("Failed to load database status");
+  const data = await response.json();
+  return data?.message || "No message";
+};
