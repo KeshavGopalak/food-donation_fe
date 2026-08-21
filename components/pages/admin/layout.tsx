@@ -1,9 +1,30 @@
 
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Users, BarChart2, Plus, HelpCircle, LogOut, Bell, Activity, MapPin, UtensilsCrossed } from "lucide-react";
 
 export default function Layout({ activePage, pageTitle, children }: { activePage: string; pageTitle: string; children: React.ReactNode }) {
+  const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    try {
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      if (user?.role !== "admin") {
+        router.replace(user?.role === "volunteer" ? "/volunteerdashboard" : "/userdashboard/dashboard");
+        return;
+      }
+      setIsChecking(false);
+    } catch {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  if (isChecking) return <div className="min-h-screen bg-slate-50" />;
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <div className="flex flex-1">

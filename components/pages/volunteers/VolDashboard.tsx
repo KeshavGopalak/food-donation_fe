@@ -2,6 +2,7 @@
 import { Award, Bell, Clock, LayoutGrid, LogOut, MapPin, MoreVertical, Route, Search, Soup, Star, TrendingUp, Truck, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { fetchPendingPickupRequests } from "@/services/volunteerServices";
 const weeklyActivity = [
   { day: "Mon", value: 45 },
@@ -17,16 +18,32 @@ const weeklyActivity = [
  
 
 export default function VolDashboard() {
+  const router = useRouter();
+  const [isChecking, setIsChecking] = React.useState(true);
   const [pendingPickupRequests, setPendingPickupRequests] = React.useState<any[]>([]);
 
   React.useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    try {
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      if (user?.role !== "volunteer") {
+        router.replace(user?.role === "admin" ? "/admin-dashboard" : "/userdashboard/dashboard");
+        return;
+      }
+      setIsChecking(false);
+    } catch {
+      router.replace("/login");
+      return;
+    }
+
     const fetchData = async () => {
       const requests = await fetchPendingPickupRequests();
       setPendingPickupRequests(requests.donations || []);
     }
 
     fetchData();
-  }, []);
+  }, [router]);
+  if (isChecking) return <div className="min-h-screen bg-gray-50" />;
   return (
 
 

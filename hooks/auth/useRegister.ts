@@ -16,7 +16,7 @@ export const useRegister = () => {
 
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
-      router.push("/login");
+      router.push(data.user?.role === "volunteer" ? "/register/volunteer-success" : "/login");
     },
   });
 };

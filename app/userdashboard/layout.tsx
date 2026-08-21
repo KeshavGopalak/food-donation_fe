@@ -50,6 +50,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
+        if (parsedUser?.role === 'admin' || parsedUser?.role === 'volunteer') {
+          router.replace(parsedUser.role === 'admin' ? '/admin-dashboard' : '/volunteerdashboard');
+          return;
+        }
         setUserName(parsedUser?.name ?? null);
       } catch (error) {
         console.error('Failed to parse stored user:', error);

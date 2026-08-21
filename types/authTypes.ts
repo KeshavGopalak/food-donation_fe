@@ -7,9 +7,12 @@ export interface LoginPayload {
 // User object structure returned by backend
 export interface User {
   id: string;
+  _id?: string;
   email: string;
   name?: string;
   role?: string;
+  status?: string;
+  verified?: boolean;
 }
 
 // Full response returned from POST /api/auth/login
@@ -28,6 +31,13 @@ export interface RegisterPayload {
   name: string;
   email: string;
   password: string;
+  role?: "user" | "volunteer";
+  volunteerDetails?: {
+    experience: string;
+    availability: string;
+    skills: string;
+    transportation: string;
+  };
 }
 export interface RegisterResponse {
   message?: string;
