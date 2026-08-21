@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   Bell,
@@ -146,20 +147,20 @@ export default function DonationForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
+    <div className="min-h-screen bg-emerald-50/40 flex font-sans text-slate-900">
       {/* Sidebar */}
      
       {/* Main Column */}
       <div className="flex-1 flex flex-col min-w-0">
 
         <main className="flex-1 p-6 max-w-7xl w-full mx-auto">
-          <section className="min-h-[70vh] px-6 py-12 md:px-12 lg:px-20 bg-white">
+          <section className="min-h-[70vh] px-4 py-8 md:px-8 lg:px-12 bg-transparent">
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left / Main form */}
-              <div className="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-8 shadow-md">
+              <div className="lg:col-span-2 rounded-3xl border border-emerald-100 bg-white p-6 md:p-8 shadow-lg shadow-emerald-950/5">
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h2 className="text-3xl font-extrabold text-emerald-700 mb-2">
+                    <h2 className="text-3xl font-extrabold text-emerald-800 mb-2">
                       Post Surplus Food
                     </h2>
                     <p className="text-gray-600">
@@ -206,7 +207,7 @@ export default function DonationForm() {
                         Food Type <span className="text-red-500">*</span>
                       </label>
                       <Select onValueChange={handleSelectChange} value={formData.foodType}>
-                        <SelectTrigger className="w-full rounded-lg border border-gray-300 p-3 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm">
+                        <SelectTrigger className="w-full rounded-xl border border-slate-200 p-3 bg-slate-50/70 hover:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm">
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -230,7 +231,7 @@ export default function DonationForm() {
                         name="itemName"
                         value={formData.itemName}
                         onChange={handleInputChange}
-                        className="w-full rounded-lg border border-gray-300 p-3 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+                        className="w-full rounded-xl border border-slate-200 p-3 bg-slate-50/70 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
                         placeholder="e.g., Artisanal Sourdough"
                         required
                       />
@@ -248,7 +249,7 @@ export default function DonationForm() {
                         name="quantity"
                         value={formData.quantity}
                         onChange={handleInputChange}
-                        className="w-full rounded-lg border border-gray-300 p-3 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+                        className="w-full rounded-xl border border-slate-200 p-3 bg-slate-50/70 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
                         placeholder="e.g., 15 kg or 10 trays"
                         required
                       />
@@ -263,7 +264,7 @@ export default function DonationForm() {
                         name="expiryWindow"
                         value={formData.expiryWindow}
                         onChange={handleInputChange}
-                        className="w-full rounded-lg border border-gray-300 p-3 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+                        className="w-full rounded-xl border border-slate-200 p-3 bg-slate-50/70 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
                         placeholder="e.g., Available until 9 PM"
                         required
                       />
@@ -275,7 +276,7 @@ export default function DonationForm() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Pickup Location <span className="text-red-500">*</span>
                     </label>
-                    <div className="flex items-center gap-3 rounded-lg border border-gray-300 bg-white p-3 text-gray-700 shadow-sm">
+                    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-gray-700 shadow-sm">
                       <svg
                         className="w-5 h-5 text-emerald-600 shrink-0"
                         fill="none"
@@ -316,7 +317,7 @@ export default function DonationForm() {
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      className="w-full rounded-lg border border-gray-300 p-3 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm resize-none"
+                      className="w-full rounded-xl border border-slate-200 p-3 bg-slate-50/70 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm resize-none"
                       placeholder="Add any additional details about the food..."
                       rows={3}
                     />
@@ -327,7 +328,7 @@ export default function DonationForm() {
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Upload Photo
                     </label>
-                    <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-white p-8 shadow-sm hover:bg-gray-50 transition">
+                    <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/40 p-8 shadow-sm hover:bg-emerald-50 transition">
                       <div className="text-center">
                         {photoUrl ? (
                           <div className="space-y-3">
@@ -400,26 +401,27 @@ export default function DonationForm() {
 
                   {/* Buttons */}
                   <div className="flex items-center gap-4 pt-2">
-                    <button
+                    <Button
                       type="submit"
                       disabled={postDonationMutation.isPending || !currentUser}
-                      className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-emerald-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+                      className="h-11 bg-emerald-700 text-white px-6 rounded-xl shadow-md hover:bg-emerald-800 transition-colors font-medium"
                     >
                       {postDonationMutation.isPending ? "Posting..." : "Post Donation"}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
                       onClick={handleClearForm}
-                      className="inline-flex items-center gap-2 bg-white border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-50 transition-colors font-medium text-gray-700"
+                      variant="outline"
+                      className="h-11 px-6 rounded-xl transition-colors font-medium text-gray-700"
                     >
                       Clear Form
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </div>
 
               {/* Right / Sidebar */}
-              <aside className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md">
+              <aside className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-950/5">
                 <div className="rounded-lg overflow-hidden mb-6 relative">
                   <div
                     className="h-36 bg-cover bg-center flex items-end p-4 text-white"
@@ -455,7 +457,7 @@ export default function DonationForm() {
                     nearby.slice(0, 3).map((item) => (
                       <div
                         key={item._id}
-                        className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition-shadow"
+                        className="border border-emerald-100 rounded-2xl p-3 bg-emerald-50/30 shadow-sm hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
